@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect;
-var Actions = require('../index.js');
+var Actions = require('../index.js')({reporter: null});
 
 describe('dalek-internal-actions', function() {
 
