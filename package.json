@@ -2,6 +2,7 @@
   "name": "dalek-internal-actions",
   "version": "0.0.1",
   "description": "DalekJS inetrnal browser action library",
+  "homepage": "http://dalekjs.com",
   "main": "./index.js",
   "directories": {
     "lib": ".",
