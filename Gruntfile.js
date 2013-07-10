@@ -9,13 +9,17 @@ module.exports = function(grunt) {
     // define a src set of files for other tasks
     src: {
       lint: ['Gruntfile.js', 'index.js', 'test/*.js'],
-      complexity: ['index.js', 'test/*.js'],
+      complexity: ['index.js'],
       test: ['test/*.js'],
       src: ['index.js']
     },
 
-    // clean coverage helper file
-    clean: ['coverage', 'report', 'report.zip'],
+    // clean automatically generated helper files & docs
+    clean: {
+      coverage: ['coverage', 'report/coverage'],
+      report: ['report/complexity', 'report/api', 'report/docs'],
+      reportZip: ['report.zip']
+    },
 
     // linting
     jshint: {
@@ -105,24 +109,40 @@ module.exports = function(grunt) {
   });
 
   // prepare files & folders for grunt:plato & coverage
-  grunt.registerTask('prepare', function () {
+  grunt.registerTask('preparePlato', function () {
     var fs = require('fs');
 
     // generate dirs for docs & reports
-    ['coverage', 'report', 'report/coverage',
-    'report/complexity', 'report/complexity/files',
-    'report/complexity/files/index_js', 'report/complexity/files/test_index_TEST_js'].forEach(function (path) {
-      fs.mkdirSync(__dirname + '/' + path);
+    ['report', 'report/complexity', 'report/complexity/files', 'report/complexity/files/index_js'].forEach(function (path) {
+      if (!fs.existsSync(__dirname + '/' + path)) {
+        fs.mkdirSync(__dirname + '/' + path);
+      }
     });
 
     // store some dummy reports, so that grunt plato doesnt complain
-    ['report.history.json', 'files/test_index_TEST_js/report.history.json', 'files/index_js/report.history.json'].forEach(function (file) {
-      fs.writeFileSync(__dirname + '/report/complexity/' + file, '{}');
+    ['report.history.json', 'files/index_js/report.history.json'].forEach(function (file) {
+      if (!fs.existsSync(__dirname + '/report/complexity/' + file)) {
+        fs.writeFileSync(__dirname + '/report/complexity/' + file, '{}');
+      }
+    });
+  });
+
+  // prepare files & folders for coverage
+  grunt.registerTask('prepareCoverage', function () {
+    var fs = require('fs');
+
+    // generate folders
+    ['coverage', 'report', 'report/coverage'].forEach(function (folder) {
+      if (!fs.existsSync(__dirname + '/' + folder)) {
+        fs.mkdirSync(__dirname + '/' + folder);
+      }
     });
 
     // generate code coverage helper file
-    var coverageHelper = 'require("blanket")({pattern: require("fs").realpathSync(__dirname + "/../index.js")});';
-    fs.writeFileSync(__dirname + '/coverage/blanket.js', coverageHelper);
+    var coverageHelper = 'require("blanket")({pattern: [require("fs").realpathSync(__dirname + "/../index.js")]});';
+    if (!fs.existsSync(__dirname + '/coverage/blanket.js')) {
+      fs.writeFileSync(__dirname + '/coverage/blanket.js', coverageHelper);
+    }
   });
 
   // load 3rd party tasks
@@ -137,6 +157,7 @@ module.exports = function(grunt) {
 
   // define runner tasks
   grunt.registerTask('lint', 'jshint');
-  grunt.registerTask('test', ['clean', 'prepare', 'lint', 'mochaTest', 'complexity']);
-  grunt.registerTask('docs', ['clean', 'prepare', 'plato', 'mochaTest', 'documantix', 'yuidoc', 'compress']);
+  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'complexity']);
+  grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'documantix', 'yuidoc', 'compress']);
+  grunt.registerTask('all', ['clean', 'test', 'docs']);
 };
