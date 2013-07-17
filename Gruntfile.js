@@ -172,7 +172,7 @@ module.exports = function(grunt) {
     if (fs.existsSync(__dirname + '/node_modules/coverage-badge')) {
       if (fs.existsSync(__dirname + '/report/coverage/coverage.json')) {
         var Badge = require(__dirname + '/node_modules/coverage-badge/lib/Badge.js');
-        var badge = function(coverage) {
+        var badgeFn = function(coverage) {
           coverage = Math.floor(Number(coverage));
           var badge = new Badge({
             box_color: getColor(coverage),
@@ -215,7 +215,7 @@ module.exports = function(grunt) {
 
         var coverage = JSON.parse(fs.readFileSync(__dirname + '/report/coverage/coverage.json')).coverage;
         var file = fs.createWriteStream(__dirname + '/report/coverage/coverage.png');
-        badge(coverage).pipe(file);
+        badgeFn(coverage).pipe(file);
       }
     }
   });
