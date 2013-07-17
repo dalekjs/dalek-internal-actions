@@ -45,6 +45,14 @@ module.exports = function(grunt) {
         },
         src: '<%= src.test %>',
         dest: 'report/coverage/index.html'
+      },
+      jsoncoverage: {
+        options: {
+          reporter: 'json-cov',
+          quiet: true
+        },
+        src: '<%= src.test %>',
+        dest: 'report/coverage/coverage.json'
       }
     },
 
@@ -158,6 +166,19 @@ module.exports = function(grunt) {
     }
   });
 
+  // generates a coverage badge
+  grunt.registerTask('generateCoverageBadge', function () {
+    var fs = require('fs');
+    if (fs.existsSync(__dirname + '/node_modules/coverage-badge')) {
+      if (fs.existsSync(__dirname + '/report/coverage/coverage.json')) {
+        var badge = require('coverage-badge');
+        var coverage = JSON.parse(fs.readFileSync(__dirname + '/report/coverage/coverage.json')).coverage;
+        var file = fs.createWriteStream(__dirname + '/report/coverage/coverage.png');
+        badge(coverage).pipe(file);
+      }
+    }
+  });
+
   // load 3rd party tasks
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -171,7 +192,7 @@ module.exports = function(grunt) {
 
   // define runner tasks
   grunt.registerTask('lint', 'jshint');
-  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'complexity']);
+  grunt.registerTask('test', ['clean:coverage', 'prepareCoverage', 'lint', 'mochaTest', 'generateCoverageBadge', 'complexity']);
   grunt.registerTask('docs', ['clean:reportZip', 'clean:report', 'preparePlato', 'plato', 'documantix', 'includereplace', 'yuidoc', 'compress']);
   grunt.registerTask('all', ['clean', 'test', 'docs']);
 };
