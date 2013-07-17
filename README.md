@@ -8,6 +8,9 @@ dalek-internal-actions
 [![Dependency Status](https://david-dm.org/dalekjs/dalek-internal-actions.png)](https://david-dm.org/dalekjs/dalek-internal-actions)
 [![devDependency Status](https://david-dm.org/dalekjs/dalek-internal-actions/dev-status.png)](https://david-dm.org/dalekjs/dalek-internal-actions#info=devDependencies)
 [![NPM version](https://badge.fury.io/js/dalek-internal-actions.png)](http://badge.fury.io/js/dalek-internal-actions)
+[![unstable](https://rawgithub.com/hughsk/stability-badges/master/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
+
+[![NPM](https://nodei.co/npm/dalek-internal-actions.png)](https://nodei.co/npm/dalek-internal-actions/)
 
 ## Warning
 
@@ -47,7 +50,7 @@ how to override that feature, browser specific problems and so on.
 
 Questions on StackOverflow often turn in to blog posts or issues.
 
-### [Github Issues](//github.com/dalekjs/dalek-internal-assertions/issues)
+### [Github Issues](//github.com/dalekjs/dalek-internal-actions/issues)
 
 Report issues with DalekJS, submit pull requests to fix problems, or to
 create summarized and documented feature requests (preferably with pull
