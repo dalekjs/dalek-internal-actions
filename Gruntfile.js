@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 module.exports = function(grunt) {
   'use strict';
 
@@ -171,6 +172,34 @@ module.exports = function(grunt) {
     var fs = require('fs');
     if (fs.existsSync(__dirname + '/node_modules/coverage-badge')) {
       if (fs.existsSync(__dirname + '/report/coverage/coverage.json')) {
+        var green = [147,188,59];
+        var yellow = [166,157,0];
+        var red = [189,0,2];
+
+        var getColor = function (coverage) {
+          if (coverage > 90) {
+            return mixColors(yellow, green, (coverage-90)/10);
+          }
+
+          if (coverage > 80) {
+            return mixColors(red, yellow, (coverage-80)/10);
+          }
+
+          return createColor(red);
+        };
+
+        var mixColors = function (from, to, ratio) {
+          var result = [], i;
+          for (i=0; i<3; i++) {
+            result[i] = Math.round(from[i] + (ratio * (to[i]-from[i])));
+          }
+          return createColor(result);
+        };
+
+        var createColor = function (values) {
+          return 'rgba('+values[0]+','+values[1]+','+values[2]+',1)';
+        };
+
         var Badge = require(__dirname + '/node_modules/coverage-badge/lib/Badge.js');
         var badgeFn = function(coverage) {
           coverage = Math.floor(Number(coverage));
@@ -188,30 +217,6 @@ module.exports = function(grunt) {
           });
           return badge.stream();
         };
-
-        var green = [147,188,59];
-        var yellow = [166,157,0];
-        var red = [189,0,2];
-
-        function getColor(coverage) {
-          var ratio = coverage/100;
-          if (coverage > 90)
-            return mixColors(yellow, green, (coverage-90)/10);
-          if (coverage > 80)
-            return mixColors(red, yellow, (coverage-80)/10);
-          return createColor(red);
-        }
-
-        function mixColors(from, to, ratio) {
-          var result = [], i;
-          for (i=0; i<3; i++)
-            result[i] = Math.round(from[i] + (ratio * (to[i]-from[i])));
-          return createColor(result);
-        }
-
-        function createColor(values) {
-          return 'rgba('+values[0]+','+values[1]+','+values[2]+',1)'
-        }
 
         var coverage = JSON.parse(fs.readFileSync(__dirname + '/report/coverage/coverage.json')).coverage;
         var file = fs.createWriteStream(__dirname + '/report/coverage/coverage.png');
