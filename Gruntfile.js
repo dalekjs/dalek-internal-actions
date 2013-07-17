@@ -208,7 +208,7 @@ module.exports = function(grunt) {
             box_text: coverage+'%',
             label_text: 'cov',
             height: 18,
-            width: 53,
+            width: 49,
             box_width: 25,
             rounding: 0,
             padding: 0,
