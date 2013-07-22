@@ -20,11 +20,12 @@ It provides all actions used by DalekJS.
 
 ## Ressources
 
-[API Documentation](http://dalekjs.com/package/dalek-internal-actions/master/api/index.html) -
+[API Docs](http://dalekjs.com/package/dalek-internal-actions/master/api/index.html) -
+[Trello](https://trello.com/b/UAMDt8vU/dalek-internal-actions) -
 [Code coverage](http://dalekjs.com/package/dalek-internal-actions/master/coverage/index.html) -
 [Code complexity](http://dalekjs.com/package/dalek-internal-actions/master/complexity/index.html) -
 [Contributing](https://github.com/dalekjs/dalek-internal-actions/blob/master/CONTRIBUTING.md) -
-[User Docs](http://dalekjs.com/docs/master/actions.html) -
+[User Docs](http://dalekjs.com/docs/actions.html) -
 [Homepage](http://dalekjs.com) -
 [Twitter](http://twitter.com/dalekjs)
 
