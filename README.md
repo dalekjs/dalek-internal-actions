@@ -8,7 +8,7 @@ dalek-internal-actions
 [![Dependency Status](https://david-dm.org/dalekjs/dalek-internal-actions.png)](https://david-dm.org/dalekjs/dalek-internal-actions)
 [![devDependency Status](https://david-dm.org/dalekjs/dalek-internal-actions/dev-status.png)](https://david-dm.org/dalekjs/dalek-internal-actions#info=devDependencies)
 [![NPM version](https://badge.fury.io/js/dalek-internal-actions.png)](http://badge.fury.io/js/dalek-internal-actions)
-[![Coverage](http://dalekjs.github.io/dalekjs.com/package/dalek-internal-actions/master/coverage/coverage.png)](http://dalekjs.github.io/dalekjs.com/package/dalek-internal-actions/master/coverage/index.html)
+[![Coverage](http://dalekjs.com/package/dalek-internal-actions/master/coverage/coverage.png)](http://dalekjs.com/package/dalek-internal-actions/master/coverage/index.html)
 [![unstable](https://rawgithub.com/hughsk/stability-badges/master/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
 
 [![NPM](https://nodei.co/npm/dalek-internal-actions.png)](https://nodei.co/npm/dalek-internal-actions/)
