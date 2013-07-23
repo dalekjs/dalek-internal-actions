@@ -100,8 +100,8 @@ module.exports = function(grunt) {
         footer: 'dalekjs/dalekjs.com/master/assets/footer.html',
         target: 'report/docs',
         vars: {
-          title: 'FooBar',
-          desc: 'FooBar',
+          title: 'DalekJS - Documentation - Actions',
+          desc: 'DalekJS - Documentation - Actions',
           docs: 'active'
         }
       },
