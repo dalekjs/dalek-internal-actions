@@ -98,7 +98,12 @@ module.exports = function(grunt) {
       options: {
         header: 'dalekjs/dalekjs.com/master/assets/header.html',
         footer: 'dalekjs/dalekjs.com/master/assets/footer.html',
-        target: 'report/docs'
+        target: 'report/docs',
+        vars: {
+          title: 'FooBar',
+          desc: 'FooBar',
+          docs: 'active'
+        }
       },
       src: ['index.js']
     },
