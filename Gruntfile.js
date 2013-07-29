@@ -102,7 +102,7 @@ module.exports = function(grunt) {
         vars: {
           title: 'DalekJS - Documentation - Actions',
           desc: 'DalekJS - Documentation - Actions',
-          docs: 'active'
+          docs: true
         }
       },
       src: ['index.js']

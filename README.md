@@ -12,11 +12,7 @@ dalek-internal-actions
 [![unstable](https://rawgithub.com/hughsk/stability-badges/master/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
 
 [![NPM](https://nodei.co/npm/dalek-internal-actions.png)](https://nodei.co/npm/dalek-internal-actions/)
-
-## Warning
-
-This module is only used internally by [DalekJS](//github.com/dalekjs/dalek).
-It provides all actions used by DalekJS.
+[![NPM](https://nodei.co/npm-dl/dalek-internal-actions.png)](https://nodei.co/npm/dalek-internal-actions/)
 
 ## Ressources
 
@@ -28,6 +24,13 @@ It provides all actions used by DalekJS.
 [User Docs](http://dalekjs.com/docs/actions.html) -
 [Homepage](http://dalekjs.com) -
 [Twitter](http://twitter.com/dalekjs)
+
+## Docs
+
+> This module is used internally by [DalekJS](//github.com/dalekjs/dalek).
+
+
+
 
 ## Help Is Just A Click Away
 
