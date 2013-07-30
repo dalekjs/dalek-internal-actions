@@ -27,10 +27,16 @@ dalek-internal-actions
 
 ## Docs
 
-> This module is used internally by [DalekJS](//github.com/dalekjs/dalek).
+This module is used internally by [DalekJS](//github.com/dalekjs/dalek).
+I can not think of a situation where this module is helpful in other ways then
+beeing pulled down & loaded by Dalek. But hey, surprise me.
 
+For Dalek, this is the module that defines all the methods that can execute some
+action in the browser. The methods are be part of the test object that dalek injects
+into the user tests.
 
-
+If you wonder what actions are:
+> Actions are a way to control your browsers, e.g. simulate user interactions like clicking elements, open urls, filling out input fields, etc.
 
 ## Help Is Just A Click Away
 
