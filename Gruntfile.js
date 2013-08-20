@@ -249,7 +249,7 @@ module.exports = function(grunt) {
     var done = this.async();
     grunt.util.spawn({cmd: 'git', args: ['describe', '--abbrev=0', '--tags']}, function (error, result) {
       var lastTag = result.toString();
-      if (grunt.file.isFile('_raw/docs/' + lastTag + '/internetexplorer.html')) {
+      if (grunt.file.isFile('_raw/docs/' + lastTag + '/actions.html')) {
         grunt.log.ok('Nothing to archive');
         done();
         return true;
@@ -259,7 +259,7 @@ module.exports = function(grunt) {
         grunt.file.mkdir('_raw/docs/' + lastTag);
       }
 
-      grunt.file.copy('report/docs/internetexplorer.html', '_raw/docs/' + lastTag + '/internetexplorer.html');
+      grunt.file.copy('report/docs/actions.html', '_raw/docs/' + lastTag + '/actions.html');
       grunt.log.ok('Archived document with version: ' + lastTag);
       done();
     });
