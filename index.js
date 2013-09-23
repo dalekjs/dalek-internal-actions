@@ -161,6 +161,8 @@ Actions.prototype.mouseEvent = function (type, selector) {
  * If both, dalek variables & env variables are set, the dalek variables win.
  * For more information about this, I recommend to check out the [configuration docs](/docs/config.html)
  *
+ * TODO: IMPLEMENT
+ * 
  * @method setHttpAuth
  * @param {string} username
  * @param {string} password
@@ -193,12 +195,14 @@ Actions.prototype.setHttpAuth = function (username, password) {
  * ```javascript
  *  test.open('http://adomain.withiframe.com')
  *    .assert.title().is('Title of a page that embeds an iframe')
- *    .toIFrame('#login')
+ *    .toFrame('#login')
  *      .assert.title().is('Title of a page that can be embedded as an iframe')
  *    .toParent()
  *    .done();
  * ```
  *
+ * > NOTE: Buggy in Firefox
+ * 
  * @api
  * @method toFrame
  * @param {string} selector Selector of the frame to switch to
@@ -230,13 +234,15 @@ Actions.prototype.toFrame = function (selector) {
  * ```javascript
  *  test.open('http://adomain.withiframe.com')
  *    .assert.title().is('Title of a page that embeds an iframe')
- *    .toIFrame('#login')
+ *    .toFrame('#login')
  *      .assert.title().is('Title of a page that can be embedded as an iframe')
  *    .toParent()
  *    .assert.title().is('Title of a page that embeds an iframe')
  *    .done();
  * ```
  *
+ * > NOTE: Buggy in Firefox
+ * 
  * @api
  * @method toParent
  * @chainable
@@ -274,6 +280,8 @@ Actions.prototype.toParent = function () {
  *    .done();
  * ```
  *
+ * > NOTE: Buggy in Firefox
+ * 
  * @api
  * @method toWindow
  * @param {string} name Name of the window to switch to
@@ -307,6 +315,8 @@ Actions.prototype.toWindow = function (name) {
  *    .done();
  * ```
  *
+ * > NOTE: Buggy in Firefox
+ * 
  * @api
  * @method toParentWindow
  * @chainable
@@ -322,6 +332,8 @@ Actions.prototype.toParentWindow = function () {
 /**
  * Wait until a resource that matches the given testFx is loaded to process a next step.
  *
+ * TODO: IMPLEMENT
+ * 
  * @method waitForResource
  * @param {string} ressource URL of the ressource that should be waited for
  * @param {number} timeout Timeout in miliseconds
@@ -338,6 +350,8 @@ Actions.prototype.waitForResource = function (ressource, timeout) {
 /**
  * Waits until the passed text is present in the page contents before processing the immediate next step.
  *
+ * TODO: IMPLEMENT
+ * 
  * @method waitForText
  * @param {string} text Text to be waited for
  * @param {number} timeout Timeout in miliseconds
@@ -346,7 +360,7 @@ Actions.prototype.waitForResource = function (ressource, timeout) {
 
 Actions.prototype.waitForText = function (text, timeout) {
   var hash = uuid.v4();
-  var cb = this._generateCallbackAssertion('waitUntilVisible', 'waitUntilVisible', text, timeout, hash);
+  var cb = this._generateCallbackAssertion('waitForText', 'waitForText', text, timeout, hash);
   this._addToActionQueue([text, (timeout ? parseInt(timeout, 10) : 5000), hash], 'waitForText', cb);
   return this;
 };
@@ -354,6 +368,8 @@ Actions.prototype.waitForText = function (text, timeout) {
 /**
  * Waits until an element matching the provided selector expression is visible in the remote DOM to process a next step.
  *
+ * TODO: IMPLEMENT
+ * 
  * @method waitUntilVisible
  * @param {string} selector Selector of the element that should be waited to become invisible
  * @param {number} timeout Timeout in miliseconds
@@ -376,6 +392,8 @@ Actions.prototype.waitUntilVisible = function (selector, timeout) {
 /**
  * Waits until an element matching the provided selector expression is no longer visible in remote DOM to process a next step.
  *
+ * TODO: IMPLEMENT
+ * 
  * @method waitWhileVisible
  * @param {string} selector Selector of the element that should be waited to become visible
  * @param {number} timeout Timeout in miliseconds
@@ -589,6 +607,8 @@ Actions.prototype.back = function () {
  * By default, this performs a left click.
  * In the future it might become the ability to also execute a "right button" click.
  *
+ * > Note: Does not work correctly in Firefox when used on `<select>` & `<option>` elements
+ * 
  * @api
  * @method click
  * @param {string} selector Selector of the element to be clicked
@@ -624,6 +644,8 @@ Actions.prototype.click = function (selector) {
  *     .done();
  * ```
  *
+ * > Note: Does not work in Firefox yet
+ * 
  * @api
  * @method submit
  * @param {string} selector Selector of the form to be submitted
@@ -698,6 +720,8 @@ Actions.prototype.open = function (location) {
  * ```
  * You can go [here](https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/value) to read up on special keys and unicodes for them (note that a code of U+EXXX is actually written in code as \uEXXX).
  *
+ * > Note: Does not work correctly in Firefox with special keys
+ * 
  * @api
  * @method type
  * @param {string} selector Selector of the form field to be filled
@@ -719,7 +743,9 @@ Actions.prototype.type = function (selector, keystrokes) {
 };
 
 /**
- * This acts just like .type() with a key difference.  This action can be used on non-input elements (useful for test site wide keyboard shortcuts and the like).  So assumeing we have a keyboard shortcut that display an alert box, we could test that with something like this:
+ * This acts just like .type() with a key difference.
+ * This action can be used on non-input elements (useful for test site wide keyboard shortcuts and the like).
+ * So assumeing we have a keyboard shortcut that display an alert box, we could test that with something like this:
  *
  * ```javascript
  * test.open('http://home.dalek.com')
@@ -728,6 +754,9 @@ Actions.prototype.type = function (selector, keystrokes) {
  *     .done();
  * ```
  *
+ *
+ * > Note: Does not work correctly in Firefox with special keys
+ * 
  * @api
  * @method sendKeys
  * @param {string} selector Selector of the form field to be filled
@@ -766,6 +795,9 @@ Actions.prototype.sendKeys = function (selector, keystrokes) {
  *     .done();
  * ```
  *
+ *
+ * > Note: Does not work in Firefox & PhantomJS
+ * 
  * @api
  * @method answer
  * @param {string} keystrokes Text to be applied to the element
@@ -778,6 +810,37 @@ Actions.prototype.answer = function (keystrokes) {
   this._addToActionQueue([keystrokes, hash], 'promptText', cb);
   return this;
 };
+
+/**
+ * Executes a JavaScript function within the browser context
+ * 
+ * ```javascript
+ *  test.open('http://adomain.com')
+ *     .execute(function () {
+ *       window.myFramework.addRow('foo');
+ *       window.myFramework.addRow('bar');
+ *     })
+ *     .done();
+ * ```
+ *
+ * You can also apply arguments to the function
+ *
+ * ```javascript
+ *  test.open('http://adomain.com')
+ *     .execute(function (paramFoo, aBar) {
+ *       window.myFramework.addRow(paramFoo);
+ *       window.myFramework.addRow(aBar);
+ *     }, 'foo', 'bar')
+ *     .done();
+ * ```
+ *
+ * > Note: Buggy in Firefox
+ * 
+ * @api
+ * @method execute
+ * @param {function} script JavaScript function that should be executed
+ * @return chainable
+ */
 
 Actions.prototype.execute = function (script) {
   var hash = uuid.v4();
@@ -793,10 +856,32 @@ Actions.prototype.execute = function (script) {
  * You can also set a callback on timeout using the onTimeout argument,
  * and set the timeout using the timeout one, in milliseconds. The default timeout is set to 5000ms.
  *
+ * ```javascript
+ *  test.open('http://adomain.com')
+ *     .waitFor(function () {
+ *       return window.myCheck === true;
+ *     })
+ *     .done();
+ * ```
+ *
+ * You can also apply arguments to the function, as well as a timeout
+ *
+ * ```javascript
+ *  test.open('http://adomain.com')
+ *     .waitFor(function (aCheck) {
+ *       return window.myThing === aCheck;
+ *     }, 'aValue', 10000)
+ *     .done();
+ * ```
+ *
+ * > Note: Buggy in Firefox
+ * 
  * @method waitFor
  * @param {function} fn Async function that resolves an promise when ready
+ * @param {array} args Additional arguments
  * @param {number} timeout Timeout in miliseconds
  * @chainable
+ * @api
  */
 
 Actions.prototype.waitFor = function (script, args, timeout) {
@@ -825,6 +910,9 @@ Actions.prototype.waitFor = function (script, args, timeout) {
  *     .accept()
  *     .done();
  * ```
+ *
+ * > Note: Does not work in Firefox & PhantomJS
+ * 
  * @api
  * @method accept
  * @return chainable
@@ -856,6 +944,9 @@ Actions.prototype.accept = function () {
  *     .assert.text('#nonono').is(':(', 'So sad')
  *     .done();
  * ```
+ *
+ * > Note: Does not work in Firefox & PhantomJS
+ * 
  * @api
  * @method dismiss
  * @return chainable
@@ -884,10 +975,9 @@ Actions.prototype.dismiss = function () {
  *   display: inline;
  * }
  *
- * @media all and (max-width: 500px) and (min-width: 300px) {
- *   #magicspan {
- *     display: none;
- *   }
+ * // @media all and (max-width: 500px) and (min-width: 300px)
+ * #magicspan {
+ *   display: none;
  * }
  * ```
  *
@@ -899,6 +989,9 @@ Actions.prototype.dismiss = function () {
  *     .done();
  * ```
  *
+ *
+ * > Note: Does not work in Firefox
+ * 
  * @api
  * @method resize
  * @param {object} dimensions Width and height as properties to apply
@@ -942,6 +1035,8 @@ Actions.prototype.resize = function (dimensions) {
  *     .done();
  * ```
  *
+ * > Note: Does not work in Firefox and PhantomJS
+ * 
  * @api
  * @method maximize
  * @chainable
