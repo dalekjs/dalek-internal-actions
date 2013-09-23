@@ -781,7 +781,7 @@ Actions.prototype.answer = function (keystrokes) {
 
 Actions.prototype.execute = function (script) {
   var hash = uuid.v4();
-  var args = [this.contextVars].concat(Array.prototype.slice.call(arguments, 1) || []); 
+  var args = [this.contextVars].concat(Array.prototype.slice.call(arguments, 1) || []);
   var cb = this._generateCallbackAssertion('execute', 'execute', script, args, hash);
   this._addToActionQueue([script, args, hash], 'execute', cb);
   return this;
@@ -1043,19 +1043,19 @@ Actions.prototype._generateCallbackAssertion = function (key, type) {
         }.bind(this));
 
         data.value.test.forEach(function (test) {
-            this.reporter.emit('report:assertion', {
-              success: test.ok,
-              expected: true,
-              value: test.ok,
-              message: test.message,
-              type: 'OK'
-            });
+          this.reporter.emit('report:assertion', {
+            success: test.ok,
+            expected: true,
+            value: test.ok,
+            message: test.message,
+            type: 'OK'
+          });
 
-            this.incrementExpectations();
+          this.incrementExpectations();
 
-            if (!test.ok) {
-              this.incrementFailedAssertions();
-            }
+          if (!test.ok) {
+            this.incrementFailedAssertions();
+          }
         }.bind(this));
 
         data.value = '';
