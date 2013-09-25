@@ -26,6 +26,7 @@
 // ext. libs
 var Q = require('q');
 var uuid = require('node-uuid');
+var cheerio = require('cheerio');
 
 // int. global
 var reporter = null;
@@ -1113,6 +1114,135 @@ Actions.prototype.waitForElement = function (selector, timeout) {
 };
 
 /**
+ * Fills the fields of a form with given values.
+ *
+ * ```html
+ * <input type="hidden" value="not really a value" id="ijustwannahaveavalue"/>
+ * ```
+ *
+ * ```javascript
+ * test.open('http://dalekjs.com')
+ *     .setValue('#ijustwannahaveavalue', 'a value')
+ *     .title().is('DalekJS - Frequently asked questions', 'What the F.A.Q.');
+ * ```
+ *
+ * @api
+ * @method setValue
+ * @param {string} selector
+ * @param {string} value
+ * @return {Actions}
+ */
+
+Actions.prototype.setValue = function (selector, value) {
+  var hash = uuid.v4();
+
+  if (this.querying === true) {
+    value = selector;
+    selector = this.selector;
+  }
+
+  var cb = this._generateCallbackAssertion('setValue', 'setValue', selector + ' : ' + value, hash);
+  this._addToActionQueue([selector, value, hash], 'setValue', cb);
+  return this;
+};
+
+// LOG (May should live in its own module)
+// ---------------------------------------
+
+Actions.prototype.logger = {};
+
+/**
+ * Logs a part of the remote dom
+ *
+ * ```html
+ * <body>
+ *   <div id="smth">
+ *     <input type="hidden" value="not really a value" id="ijustwannahaveavalue"/>
+ *   </div>
+ * </body>
+ * ```
+ *
+ * ```javascript
+ * test.open('http://dalekjs.com/guineapig')
+ *     .log.dom('#smth')
+ *     .done();
+ * ```
+ *
+ * Will output this:
+ *
+ * ```html
+ *  DOM: #smth <input type="hidden" value="not really a value" id="ijustwannahaveavalue"/>
+ * ```
+
+ * 
+ * @api
+ * @method log.dom
+ * @param {string} selector CSS selector
+ * @chainable
+ */
+
+Actions.prototype.logger.dom = function (selector) {
+  var hash = uuid.v4();
+
+  var cb = function logDomCb (data) {
+    if (data && data.key === 'source' && !this.uuids[data.uuid]) {
+      this.uuids[data.uuid] = true;
+      var $ = cheerio.load(data.value);
+      var result = selector ? $(selector).html() : $.html();
+      selector = selector ? selector : ' ';
+      result = !result ? ' Not found' : result;
+      this.reporter.emit('report:log:user', 'DOM: ' + selector + ' ' + result);
+    }
+  }.bind(this);
+
+  this._addToActionQueue([hash], 'source', cb);
+  return this;
+};
+
+/**
+ * Logs a user defined message
+ *
+ * ```javascript
+ * test.open('http://dalekjs.com/guineapig')
+ *     .execute(function () {
+ *       this.data('aKey', 'aValue');
+ *     })
+ *     .log.message(function () {
+ *       return test.data('aKey'); // outputs MESSAGE: 'aValue'
+ *     })
+ *     .done();
+ * ```
+ *
+ * 'Normal' messages can be logged too:
+ *
+ * ```javascript
+ * test.open('http://dalekjs.com/guineapig')
+ *     .log.message('FooBar') // outputs MESSAGE: FooBar
+ *     .done();
+ * ```
+ * 
+ * @api
+ * @method log.message
+ * @param {function|string} message
+ * @chainable
+ */
+
+Actions.prototype.logger.message = function (message) {
+  var hash = uuid.v4();
+
+  var cb = function logMessageCb (data) {
+    if (data && data.key === 'noop' && !this.uuids[data.hash]) {
+      this.uuids[data.hash] = true;
+      var result = (typeof(data.value) === 'function') ? data.value.bind(this)() : data.value;
+      this.reporter.emit('report:log:user', 'MESSAGE: ' + result);
+    }
+  }.bind(this);
+
+  this._addToActionQueue([message, hash], 'noop', cb);
+  return this;
+};
+
+/**
  * Generates a callback that will be fired when the action has been completed.
  * The callback itself will then validate the answer and will also emit an event
  * that the action has been successfully executed.
@@ -1130,7 +1260,6 @@ Actions.prototype._generateCallbackAssertion = function (key, type) {
       if (!data || (data.value && data.value === null)) {
         data.value = '';
       }
-
 
       if (key === 'execute') {
         Object.keys(data.value.dalek).forEach(function (key) {
@@ -1165,39 +1294,6 @@ Actions.prototype._generateCallbackAssertion = function (key, type) {
     }
   }.bind(this);
   return cb;
-};
-
-/**
- * Fills the fields of a form with given values.
- *
- * ```html
- * <input type="hidden" value="not really a value" id="ijustwannahaveavalue"/>
- * ```
- *
- * ```javascript
- * test.open('http://dalekjs.com')
- *     .setValue('#ijustwannahaveavalue', 'a value')
- *     .title().is('DalekJS - Frequently asked questions', 'What the F.A.Q.');
- * ```
- *
- * @api
- * @method setValue
- * @param {string} selector
- * @param {string} value
- * @return {Actions}
- */
-
-Actions.prototype.setValue = function (selector, value) {
-  var hash = uuid.v4();
-
-  if (this.querying === true) {
-    value = selector;
-    selector = this.selector;
-  }
-
-  var cb = this._generateCallbackAssertion('setValue', 'setValue', selector + ' : ' + value, hash);
-  this._addToActionQueue([selector, value, hash], 'setValue', cb);
-  return this;
 };
 
 /**
